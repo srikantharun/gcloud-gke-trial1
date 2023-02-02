@@ -36,12 +36,6 @@ jobs:
           workload_identity_provider: 'projects/1044325156148/locations/global/workloadIdentityPools/scopeit/providers/demo-pool'
           service_account: 'service-trial1@hidden-phalanx-375513.iam.gserviceaccount.com'
 
-    - id: 'gcloud'
-      name: 'gcloud list'
-      run: |-
-        gcloud auth login --brief --cred-file="${{ steps.auth.outputs.credentials_file_path }}"
-        gcloud services list
-
     - name: Checkout
       uses: actions/checkout@v3
 
@@ -50,6 +44,10 @@ jobs:
       with:
         service_account_key: ${{ secrets.GKE_SA_KEY }}
         project_id: ${{ secrets.GKE_PROJECT }}
+
+    - run: |-
+        gcloud config set project $PROJECT_ID
+        gcloud auth login --brief --cred-file="${{ steps.auth.outputs.credentials_file_path }}"
 
     # Configure Docker to use the gcloud command-line tool as a credential
     # helper for authentication
