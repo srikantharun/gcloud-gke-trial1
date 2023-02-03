@@ -34,20 +34,41 @@ jobs:
       name: 'Authenticate to GCP'
       uses: 'google-github-actions/auth@v1'
       with:
-          #create_credentials_file: 'true'
+          create_credentials_file: 'true'
           workload_identity_provider: 'projects/1044325156148/locations/global/workloadIdentityPools/trial-gke/providers/github-oidc-mine'
           service_account: 'service-trial1@hidden-phalanx-375513.iam.gserviceaccount.com'
           
     # Setup gcloud CLI
-    - uses: google-github-actions/setup-gcloud@v1
+    - uses: google-github-actions/setup-gcloud@94337306dda8180d967a56932ceb4ddcf01edae7
+      with:
+        service_account_key: ${{ secrets.GKE_SA_KEY }}
+        project_id: ${{ secrets.GKE_PROJECT }}
  
     # Get the GKE credentials so we can deploy to the cluster
     - run: |-
-        gcloud container clusters get-credentials "$GKE_CLUSTER" --zone "$GKE_ZONE"
+        gcloud config set project $PROJECT_ID
+        gcloud auth login --brief --cred-file="${{ steps.auth.outputs.credentials_file_path }}"
         
-    # Deploy sample image to the GKE cluster
-    - name: Deploy
+    - run: |-
+        gcloud --quiet auth configure-docker    
+        
+    # Get the GKE credentials so we can deploy to the cluster
+    - uses: google-github-actions/get-gke-credentials@fb08709ba27618c31c09e014e1d8364b02e5042e
+      with:
+        cluster_name: ${{ env.GKE_CLUSTER }}
+        location: ${{ env.GKE_ZONE }}
+        credentials: ${{ secrets.GKE_SA_KEY }}
+
+    # Build the Docker image
+    - name: Build
       run: |-
-        kubectl apply -f deployment.yml
-        kubectl rollout status deployment/$DEPLOYMENT_NAME
-        kubectl get services -o wide
+        docker build \
+          --tag "gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA" \
+          --build-arg GITHUB_SHA="$GITHUB_SHA" \
+          --build-arg GITHUB_REF="$GITHUB_REF" \
+          .
+
+    # Push the Docker image to Google Container Registry
+    - name: Publish
+      run: |-
+        docker push "gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA"
