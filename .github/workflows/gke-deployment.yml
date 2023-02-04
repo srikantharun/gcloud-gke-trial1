@@ -90,6 +90,9 @@ jobs:
       # configuration for the job here is very minimal.
       uses: 'srikantharun/help-with-helm@master'
       with:
+        release: 'nginx'
+        track: canary
+        namespace: 'default'
         token: '${{ github.token }}'
         secrets: '${{ toJSON(secrets) }}'
         version: '${{ github.sha }}'
