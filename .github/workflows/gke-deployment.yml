@@ -85,3 +85,15 @@ jobs:
       run: |-
         sed -i -e 's/GITHUB_SHA/'"$GITHUB_SHA"'/' ${{ github.workspace }}/.github/manifests/deployment.yaml
         kubectl apply -f ${{ github.workspace }}/.github/manifests/deployment.yaml
+
+    - name: 'Deploy-helm'
+      # Parameters are pulled directly from the GitHub deployment event so the
+      # configuration for the job here is very minimal.
+      uses: 'deliverybot/helm@master'
+      with:
+        token: '${{ github.token }}'
+        secrets: '${{ toJSON(secrets) }}'
+        version: '${{ github.sha }}'
+        chart: 'app'
+      env:
+        KUBECONFIG_FILE: '${{ secrets.KUBECONFIG }}'
