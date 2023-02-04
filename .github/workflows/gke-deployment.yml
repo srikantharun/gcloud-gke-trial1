@@ -1,8 +1,7 @@
 # This workflow uses actions that are not certified by GitHub.
 # They are provided by a third-party and are governed by
 # separate terms of service, privacy policy, and support
-# documentation.
-   
+# documentation.  
 name: Build and Deploy to GKE
 
 on:
@@ -22,37 +21,37 @@ jobs:
     name: Setup, Build, Publish, and Deploy
     runs-on: ubuntu-latest
     environment: production
+    
     permissions:
       contents: 'read'
       id-token: 'write'
 
     steps:
-    - id: 'auth'
-      name: 'Authenticate to GCP'
-      uses: 'google-github-actions/auth@v0.3.1'
-      with:
-          create_credentials_file: 'true'
-          workload_identity_provider: 'projects/1044325156148/locations/global/workloadIdentityPools/scopeit/providers/demo-pool'
-          service_account: 'service-trial1@hidden-phalanx-375513.iam.gserviceaccount.com'
-
     - name: Checkout
       uses: actions/checkout@v3
 
+    - id: 'auth'
+      name: 'Authenticate to GCP'
+      uses: 'google-github-actions/auth@v1'
+      with:
+          create_credentials_file: 'true'
+          workload_identity_provider: 'projects/1044325156148/locations/global/workloadIdentityPools/trial-gke/providers/github-oidc-mine'
+          service_account: 'service-trial1@hidden-phalanx-375513.iam.gserviceaccount.com'
+          
     # Setup gcloud CLI
     - uses: google-github-actions/setup-gcloud@94337306dda8180d967a56932ceb4ddcf01edae7
       with:
         service_account_key: ${{ secrets.GKE_SA_KEY }}
         project_id: ${{ secrets.GKE_PROJECT }}
-
+ 
+    # Get the GKE credentials so we can deploy to the cluster
     - run: |-
         gcloud config set project $PROJECT_ID
         gcloud auth login --brief --cred-file="${{ steps.auth.outputs.credentials_file_path }}"
-
-    # Configure Docker to use the gcloud command-line tool as a credential
-    # helper for authentication
+        
     - run: |-
-        gcloud --quiet auth configure-docker
-
+        gcloud --quiet auth configure-docker    
+        
     # Get the GKE credentials so we can deploy to the cluster
     - uses: google-github-actions/get-gke-credentials@fb08709ba27618c31c09e014e1d8364b02e5042e
       with:
@@ -73,6 +72,7 @@ jobs:
     - name: Publish
       run: |-
         docker push "gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA"
+<<<<<<< HEAD
 
     # Set up kustomize
     # - name: Set up Kustomize
