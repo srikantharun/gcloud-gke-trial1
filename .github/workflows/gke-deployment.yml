@@ -86,6 +86,7 @@ jobs:
         sed -i -e 's/GITHUB_SHA/'"$GITHUB_SHA"'/' ${{ github.workspace }}/.github/manifest/deployment.yaml
         kubectl apply -f ${{ github.workspace }}/.github/manifest/deployment.yaml
 
+
     - name: 'Deploy-helm'
       # Parameters are pulled directly from the GitHub deployment event so the
       # configuration for the job here is very minimal.
