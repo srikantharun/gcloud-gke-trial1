@@ -99,5 +99,6 @@ jobs:
         secrets: '${{ toJSON(secrets) }}'
         version: '${{ github.sha }}'
         chart: 'app'
+        helm: helm3
       env:
         KUBECONFIG_FILE: '${{ secrets.KUBECONFIG }}'
