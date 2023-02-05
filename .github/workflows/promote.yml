@@ -2,6 +2,12 @@ name: 'Promote'
 on:
   workflow_dispatch
 
+env:
+  PROJECT_ID: ${{ secrets.GKE_PROJECT }}
+  GKE_CLUSTER: trial-cluster    # Add your cluster name here.
+  GKE_ZONE: europe-west2  # Add your cluster zone here.
+  DEPLOYMENT_NAME: python-app # Add your deployment name here.
+  IMAGE: python-app
 
 jobs:
   deployment:
