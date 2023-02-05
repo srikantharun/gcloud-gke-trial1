@@ -1,0 +1,16 @@
+name: 'Promotwe'
+on:
+  workflow_dispatch
+
+jobs:
+  deployment:
+    runs-on: 'ubuntu-latest'
+
+    steps:
+
+    - uses: 'actions/checkout@v1'
+
+    - name: 'Promote to production'
+      uses: boswelja/promote-prerelease-action@0.0.2
+      with: 
+        repo-token: '${{ github.token }}'
