@@ -10,7 +10,6 @@ canary:
     release: production-myapp
     namespace: example-helm
     track: canary
-    helm: helm3
     values:
       replicaCount: 1
 
@@ -29,7 +28,6 @@ production:
     release: production-myapp
     namespace: example-helm
     track: stable
-    helm: helm3
     values:
       replicaCount: 5
 
@@ -44,7 +42,6 @@ staging:
     release: staging-myapp
     namespace: example-helm
     track: stable
-    helm: helm3
     values:
       replicaCount: 1
 
@@ -64,6 +61,5 @@ review:
     release: review-myapp-${{ pr }}
     namespace: example-helm
     track: stable
-    helm: helm3
     values:
       replicaCount: 1
