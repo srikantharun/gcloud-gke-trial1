@@ -15,9 +15,15 @@ jobs:
       # configuration for the job here is very minimal.
       uses: 'srikantharun/help-with-helm@master'
       with:
+        release: 'production-myapp'
+        namespace: 'default'
         token: '${{ github.token }}'
         secrets: '${{ toJSON(secrets) }}'
         version: '${{ github.sha }}'
         chart: 'app'
+        remove_canary: true
+        track: stable
+        value_files: ["./config/production.yml","./config/_common.yml"]
+        helm: helm3
       env:
         KUBECONFIG_FILE: '${{ secrets.KUBECONFIG }}'
