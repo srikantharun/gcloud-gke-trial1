@@ -1,22 +1,46 @@
-name: 'Deploy'
-on: ['deployment']
+name: Deploy
+
+on: [push]
 
 jobs:
-  deployment:
-    runs-on: 'ubuntu-latest'
-    steps:
-    - name: 'Checkout'
-      uses: 'actions/checkout@v1'
+  deploy:
+    name: Deploy my app
 
-    - name: 'Deploy'
-      # Parameters are pulled directly from the GitHub deployment event so the
-      # configuration for the job here is very minimal.
-      uses: 'srikantharun/help-with-helm@master'
-      with:
-        token: '${{ github.token }}'
-        secrets: '${{ toJSON(secrets) }}'
-        version: '${{ github.sha }}'
-        chart: 'app'
-        helm: helm3
-      env:
-        KUBECONFIG_FILE: '${{ secrets.KUBECONFIG }}'
+    # IMPORTANT: the workflow must have write access to deployments, otherwise the action will fail.
+    permissions:
+      deployments: write
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+
+      - uses: chrnorm/deployment-action@v2
+        name: Create GitHub deployment
+        id: deployment
+        with:
+          token: '${{ github.token }}'
+          environment-url: http://my-app-url.com
+          environment: production
+
+      - name: Deploy my app
+        run: |
+          # add your deployment code here
+
+      - name: Update deployment status (success)
+        if: success()
+        uses: chrnorm/deployment-status@v2
+        with:
+          token: '${{ github.token }}'
+          environment-url: http://my-app-url.com
+          state: 'success'
+          deployment-id: ${{ steps.deployment.outputs.deployment_id }}
+
+      - name: Update deployment status (failure)
+        if: failure()
+        uses: chrnorm/deployment-status@v2
+        with:
+          token: '${{ github.token }}'
+          environment-url: http://my-app-url.com
+          state: 'failure'
+          deployment-id: ${{ steps.deployment.outputs.deployment_id }}
