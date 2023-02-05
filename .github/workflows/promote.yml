@@ -1,4 +1,4 @@
-name: 'Promotwe'
+name: 'Promote'
 on:
   workflow_dispatch
 
