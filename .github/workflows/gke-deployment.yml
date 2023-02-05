@@ -36,7 +36,7 @@ jobs:
       uses: 'google-github-actions/auth@v1'
       with:
           create_credentials_file: 'true'
-          workload_identity_provider: 'projects/1044325156148/locations/global/workloadIdentityPools/trial-gke/providers/github-oidc-mine'
+          workload_identity_provider: 'projects/1044325156148/locations/global/workloadIdentityPools/trial-gke/providers/github-oidc-srikaruna'
           service_account: 'service-trial1@hidden-phalanx-375513.iam.gserviceaccount.com'
           
     # Setup gcloud CLI
@@ -92,7 +92,7 @@ jobs:
       # configuration for the job here is very minimal.
       uses: 'srikantharun/help-with-helm@master'
       with:
-        release: 'nginx'
+        release: 'nginx-dev'
         track: canary
         namespace: 'default'
         token: '${{ github.token }}'
