@@ -76,7 +76,7 @@ jobs:
         chart: 'app'
         remove_canary: true
         track: stable
-        value_files: '["./config/production.yml","./config/_common.yml"]'
+        value-files: '["./config/production.yml","./config/_common.yml"]'
         helm: helm3
       env:
         KUBECONFIG_FILE: '${{ secrets.KUBECONFIG }}'
