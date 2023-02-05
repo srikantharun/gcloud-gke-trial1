@@ -31,7 +31,6 @@ jobs:
 
     # Get the GKE credentials so we can deploy to the cluster
     - run: |-
-        gcloud config set project $PROJECT_ID
         gcloud auth login --brief --cred-file="${{ steps.auth.outputs.credentials_file_path }}"
 
     - run: |-
