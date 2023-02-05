@@ -1,0 +1,23 @@
+name: Deploy
+
+on: [deployment]
+
+jobs:
+  deploy:
+    name: Deploy my app
+
+    runs-on: ubuntu-latest
+
+    permissions:
+      deployments: write
+
+    steps:
+      - uses: actions/checkout@v1
+      
+      - uses: chrnorm/deployment-status@v2.0.1
+        with:          
+          # State for the deployment
+          state: 'Success'
+          # Github repository token
+          token: '${{ github.token }}'          
+          environment: production
