@@ -1,6 +1,6 @@
 name: Deploy
 
-on: [push]
+on: [deployment]
 
 jobs:
   deploy:
@@ -15,26 +15,9 @@ jobs:
       - uses: actions/checkout@v1
       
       - uses: chrnorm/deployment-status@v2.0.1
-        with:
-          # A custom repository to create the deployment for. Defaults to the repo the action is running in.
-          repo: # optional
-          # A custom owner to create the deployment for. Defaults to the repo owner the action is running in.
-          owner: # optional
+        with:          
           # State for the deployment
-          state: 
+          state: 'Success'
           # Github repository token
-          token: 
-          # Sets the URL for deployment output
-          log-url: # optional
-          # Sets the URL for accessing your environment
-          environment-url: # optional, default is 
-          # Name for the target deployment environment, which can be changed when setting a deploy status.
-          environment: # optional
-          # Descriptive message about the deployment
-          description: # optional
-          # The ID of the deployment
-          deployment-id: 
-          # Adds a new inactive status to all prior non-transient, non-production environment deployments with the same repository and environment name as the created status's deployment. An inactive status is only added to deployments that had a success state.
-          auto-inactive: # optional, default is true
-          # Changes the API base URL for a GitHub Enterprise server.
-          github-base-url: # optional
+          token: '${{ github.token }}'          
+          environment: production
