@@ -1,7 +1,11 @@
 name: 'Promote'
 on:
   workflow_dispatch
-
+  push:
+    branches: 
+      - 'master'
+    tags:
+      - 'rel*'
 env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT }}
   GKE_CLUSTER: trial-cluster    # Add your cluster name here.
