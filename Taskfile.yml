@@ -12,10 +12,10 @@ tasks:
     cmds:
       - mkdir dist
       - echo $CR_PAT | helm registry login ghcr.io --username $OWNER --password-stdin
-      - helm package nginx --destination dist
-      - helm push dist/nginx-*.tgz oci://ghcr.io/dirien/ > .digest
+      - helm package app --destination dist
+      - helm push dist/app-*.tgz oci://ghcr.io/dirien/ > .digest
       - cat .digest | awk -F "[, ]+" '/Digest/{print $NF}'
-      - cosign sign ghcr.io/srikantharun/nginx@$(cat .digest | awk -F "[, ]+" '/Digest/{print $NF}')
+      - cosign sign ghcr.io/srikantharun/app@$(cat .digest | awk -F "[, ]+" '/Digest/{print $NF}')
     env:
       HELM_EXPERIMENTAL_OCI: 1
       COSIGN_EXPERIMENTAL: "true"
