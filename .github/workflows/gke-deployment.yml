@@ -117,7 +117,9 @@ jobs:
         token: '${{ github.token }}'
         secrets: '${{ toJSON(secrets) }}'
         version: '${{ github.sha }}'
-        chart: 'app'
+        repository: ghcr.io/srikantharun/app
+        repository_username: ${{ github.repository_owner }}
+        repository_password: ${{ secrets.CR_PAT }}
         helm: helm3
       env:
         KUBECONFIG_FILE: '${{ secrets.KUBECONFIG }}'
