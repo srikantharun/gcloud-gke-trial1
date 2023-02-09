@@ -15,7 +15,6 @@ tasks:
       - helm package app --destination dist
       - helm push dist/app-*.tgz oci://ghcr.io/srikantharun/ > .digest
       - cat .digest | awk -F "[, ]+" '/Digest/{print $NF}'
-      - cosign sign ghcr.io/srikantharun/app@$(cat .digest | awk -F "[, ]+" '/Digest/{print $NF}')
     env:
       HELM_EXPERIMENTAL_OCI: 1
       COSIGN_EXPERIMENTAL: "true"
