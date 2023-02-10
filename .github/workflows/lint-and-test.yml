@@ -2,7 +2,10 @@ name: ct-linting-and-testing
 on:
  workflow_dispatch
 
-permissions: read-all
+permissions:
+    id-token: write
+    contents: write              # This is required for actions/checkout@v1
+    security-events: write   # To upload sarif files
 
 jobs:
   chart-test:
@@ -38,7 +41,7 @@ jobs:
         uses: github/codeql-action/upload-sarif@3ebbd71c74ef574dbc558c82f70e52732c8b44fe # v2.2.1
         with:
           sarif_file: 'trivy-results.sarif'
-
+   
       - name: Setup Chart Linting
         id: lint
         uses: helm/chart-testing-action@afea100a513515fbd68b0e72a7bb0ae34cb62aec # tag=v2.3.1
