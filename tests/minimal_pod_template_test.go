@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	corev1 "k8s.io/api/core/v1"
+        appsv1 "k8s.io/api/apps/v1"
 
 	"github.com/gruntwork-io/terratest/modules/helm"
 )
@@ -27,16 +28,15 @@ func TestPodTemplateRendersContainerImage(t *testing.T) {
 
 	// Now we use kubernetes/client-go library to render the template output into the Pod struct. This will
 	// ensure the Pod resource is rendered correctly.
-	var pod corev1.Pod
-	helm.UnmarshalK8SYaml(t, output, &pod)
+	var deployment appsv1.Deployment
+	helm.UnmarshalK8SYaml(t, output, &deployment)
 
 	// Finally, we verify the pod spec is set to the expected container image value
 	expectedContainerImage := "nginx"
-        deploymentContainers := pod.Spec.Containers
-        t.Fatalf("Rendered container image (%s)", deploymentContainers[0])
+        deploymentContainers := deployment.Spec.Template.Spec.Containers
  
 	//podContainers := pod.Spec.Containers
-	if deploymentContainers[0] != expectedContainerImage {
-		t.Fatalf("Rendered container image (%s) is not expected (%s)", deploymentContainers[0], expectedContainerImage)
+	if deploymentContainers[0].Image != expectedContainerImage {
+		t.Fatalf("Rendered container image (%s) is not expected (%s)", deploymentContainers[0].Image, expectedContainerImage)
 	}
 }
