@@ -8,6 +8,7 @@ import (
 	"github.com/gruntwork-io/terratest/modules/helm"
 )
 
+
 func TestPodTemplateRendersContainerImage(t *testing.T) {
 	// Path to the helm chart we will test
 	helmChartPath := "../app"
