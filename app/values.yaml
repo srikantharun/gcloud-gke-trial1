@@ -3,6 +3,7 @@ replicaCount: 1
 
 app:
   # app.name -- Application name: Can be consistent between tracks. (required)
+  name: app
   fullname: app
   # app.version -- Application version: Unique tag for this release. (required)
   version: 1.0.0
