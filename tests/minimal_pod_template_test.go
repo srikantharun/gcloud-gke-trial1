@@ -31,7 +31,7 @@ func TestPodTemplateRendersContainerImage(t *testing.T) {
 	helm.UnmarshalK8SYaml(t, output, &deployment)
 
 	// Finally, we verify the pod spec is set to the expected container image value
-	expectedContainerImage := "nginx"
+	expectedContainerImage := "nginx:1.15.8"
         deploymentContainers := deployment.Spec.Template.Spec.Containers
  
 	//podContainers := pod.Spec.Containers
