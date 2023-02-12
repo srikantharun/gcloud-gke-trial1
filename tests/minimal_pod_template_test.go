@@ -36,7 +36,7 @@ func TestPodTemplateRendersContainerImage(t *testing.T) {
         t.Fatalf("Rendered container image (%s)", deploymentContainers[0])
  
 	//podContainers := pod.Spec.Containers
-	if deploymentContainers != expectedContainerImage {
-		t.Fatalf("Rendered container image (%s) is not expected (%s)", deploymentContainers, expectedContainerImage)
+	if deploymentContainers[0] != expectedContainerImage {
+		t.Fatalf("Rendered container image (%s) is not expected (%s)", deploymentContainers[0], expectedContainerImage)
 	}
 }
