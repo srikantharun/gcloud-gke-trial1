@@ -33,7 +33,7 @@ func TestPodTemplateRendersContainerImage(t *testing.T) {
 	// Finally, we verify the pod spec is set to the expected container image value
 	expectedContainerImage := "nginx"
 	podContainers := pod.Spec.Containers
-	if podContainers.Image != expectedContainerImage {
-		t.Fatalf("Rendered container image (%s) is not expected (%s)", podContainers.Image, expectedContainerImage)
+	if podContainers[0].Image != expectedContainerImage {
+		t.Fatalf("Rendered container image (%s) is not expected (%s)", podContainers[0].Image, expectedContainerImage)
 	}
 }
